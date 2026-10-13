@@ -1,0 +1,226 @@
+Fashion Recommender Using Deep Learning — Project Documentation
+1. Introduction
+The Fashion Recommender is an AI/ML project inspired by fashion 
+e-commerce platforms such as Myntra. It recommends visually similar 
+fashion products based on an input image.
+The system uses a pretrained ResNet-18 Convolutional Neural Network 
+(CNN) to extract image features and K-Nearest Neighbors (KNN) with 
+cosine similarity to find similar products from a fashion catalogue.
+The application provides a Streamlit interface where users can browse 
+products, upload an image, and view recommended fashion items.
+2. Objectives
+- Develop an image-based fashion recommendation system.
+- Extract meaningful features from product images using ResNet-18.
+- Find visually similar products using KNN and cosine similarity.
+- Create an interactive interface for image upload and product browsing.
+- Explore the use of deep learning in e-commerce applications.
+- Evaluate recommendation quality and identify opportunities for improvement.
+3. Dataset Collection
+Dataset: Fashion Product Images Dataset
+Source: The repository credits a Kaggle dataset and reports that it 
+is hosted on Hugging Face.Approximate size: 44,000 images, according
+to the repository README.The dataset contains fashion product images
+that form the catalogue used for similarity-based recommendations.
+Dataset preparation
+1. Download the dataset from the source used by the repository.
+2. Load the product images and associated metadata.
+3. Verify that images can be opened correctly.
+4. Check image paths and corresponding product records.
+5. Identify missing or duplicate records where possible.
+6. Record the actual number of usable images.
+4. Data Preprocessing
+Preprocessing prepares images for the deep learning model.
+1. Image loading: Read the product image from the dataset or user upload.
+2. Resizing: Resize the image to the dimensions expected by the pretrained model.
+3. Color conversion: Ensure the image uses the correct color-channel format.
+4. Normalization: Scale pixel values using the transformation expected by the 
+selected ResNet-18 weights.
+5. Tensor conversion: Convert the image into a PyTorch tensor.
+6. Feature extraction: Pass the processed image through ResNet-18 
+to generate a numerical representation.
+The same preprocessing steps should be applied to catalogue images 
+and uploaded query images to ensure consistent comparisons.
+5. Technologies Used
+### 5. Technologies Used
+
+| S. No. | Technology                                      | Purpose                                                                                     |
+| ------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 1      | Python                                          | Main programming language used to develop the recommendation system.                        |
+| 2      | PyTorch                                         | Used to load and run the ResNet-18 deep learning model for image feature extraction.        |
+| 3      | ResNet-18 (CNN)                                 | Extracts visual features from fashion product images.                                       |
+| 4      | K-Nearest Neighbors (KNN) and Cosine Similarity | Identifies and retrieves visually similar fashion products based on extracted features.     |
+| 5      | Streamlit                                       | Creates an interactive web application for uploading images and displaying recommendations. |
+6. Model Architecture
+6.1 ResNet-18
+ResNet-18 is a CNN pretrained on ImageNet. It learns visual patterns such as
+edges, textures, shapes, and higher-level image features.
+In this project, the final classification layer is removed so that the model 
+can generate an image feature vector rather than predict an ImageNet class.
+According to the repository README, the resulting feature vector contains 512 numerical values.
+6.2 Feature extraction
+Each catalogue image is converted into a feature vector.
+For example:
+- Image A → Feature vector A
+- Image B → Feature vector B
+- Image C → Feature vector C
+These vectors represent visual characteristics of the images. The system compares 
+them to identify products that are visually similar.
+6.3 K-Nearest Neighbors (KNN)
+KNN retrieves the nearest catalogue feature vectors to the input image's feature vector.
+The basic process is:
+1. Receive the input feature vector.
+2. Compare it with stored catalogue feature vectors.
+3. Calculate cosine-based distances.
+4. Identify the nearest products.
+5. Return the top-\(K\) results.
+Here, \(K\) represents the number of similar products returned. The actual value 
+should be confirmed in the implementation.
+6.4 Cosine similarity
+Cosine similarity measures the angle between two vectors.
+\[
+\text{Cosine Similarity}(A,B)=\frac{A\cdot B}{\|A\|\|B\|}\]
+
+Where:
+- \(A\) = feature vector of the input image.
+- \(B\) = feature vector of a catalogue image.
+- \(A\cdot B\) = dot product.
+- \(\|A\|\) and \(\|B\|\) = vector magnitudes.
+A higher cosine similarity generally indicates more similar feature directions.
+ Some KNN implementations use cosine distance, calculated as \(1-\text{similarity}\),
+to rank the nearest items.
+7. System Workflow
+### 7. System Workflow
+
+1\. Dataset Collection: Collect fashion product images from a fashion dataset containing 
+different clothing categories and styles.
+2\. Image Preprocessing: Prepare the images for the deep learning model by resizing them and
+ converting them into the required format.
+
+3\. Feature Extraction: Use the pretrained ResNet-18 CNN model to extract 
+visual features from each fashion product image.
+
+4\. Feature Representation: Convert the extracted image features into numerical
+ feature vectors that represent the visual characteristics of the products.
+
+5\. Similarity Calculation: Apply cosine similarity and the K-Nearest Neighbors (KNN)
+ algorithm to identify fashion products with similar feature representations.
+
+6\. Recommendation Generation: Retrieve the most visually similar fashion products based
+ on the uploaded image or selected product.
+
+7\. Result Display: Display the recommended fashion products through the Streamlit web 
+application, allowing users to explore visually similar items.
+
+System Workflow Diagram
+
+Dataset Collection
+
+Image Preprocessing
+
+ResNet-18 Feature Extraction
+
+Feature Vector Generation
+
+KNN + Cosine Similarity
+
+Similar Product Recommendation
+
+Display Results in Streamlit
+Detailed working process
+1. The application loads the fashion catalogue and its metadata.
+2. Catalogue images are represented by feature vectors.
+3. The user uploads an image or selects a product.
+4. The query image passes through the same preprocessing pipeline.
+5. ResNet-18 generates its feature vector.
+6. KNN compares the query vector with the stored catalogue vectors.
+7. The closest matches are retrieved.
+8. The application displays the corresponding product images and available information.
+8. Application Modules
+8.1 Browse Catalog
+Allows users to explore sample fashion products and select an item to find visually similar products.
+8.2 Upload Image
+Allows users to upload a fashion image. The model extracts its features and 
+retrieves visually similar items from the catalogue.
+8.3 Recommendation Engine
+Uses the extracted image features and nearest-neighbor search to rank catalogue items by visual similarity.
+8.4 Analytics Dashboard
+Displays dataset statistics and sample images, as described in the repository README.
+
+9. Project Folder Structure
+The repository documents the following simplified structure:
+fashion-recommender/
+│
+├── models/
+│   ├── fashion_recommender.pkl
+│   ├── fashion_features.npy
+│   └── fashion_metadata.csv
+│
+├── fashion_app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── .devcontainer/
+File descriptions:
+- fashion_app.py — Streamlit application.
+- fashion_recommender.pkl — Saved recommender/model artifact, as documented by the repository.
+- fashion_features.npy — Stored numerical image features.
+- fashion_metadata.csv — Product metadata.
+- requirements.txt — Python dependencies.
+- README.md — Setup and usage instructions.
+- .gitignore — Files and folders excluded from Git tracking.
+Confirm the files in your actual checkout because some artifacts may be generated or downloaded during setup.
+10. Model Evaluation
+Since this is a recommendation task, evaluation should measure the relevance
+ of retrieved products rather than only classification accuracy.
+Precision@K
+\[
+\text{Precision@K}=
+\frac{\text{Relevant items in top K}}{K}
+\]
+
+This measures how many of the returned recommendations are relevant.
+Recall@K
+\[
+\text{Recall@K}=
+\frac{\text{Relevant items in top K}}
+{\text{Total relevant items}}
+\]
+
+This measures how many relevant items the system successfully retrieves.
+Other evaluation methods include:
+- Visual inspection of recommended products.
+- Mean Average Precision (mAP), when relevance labels are available.
+- Recommendation response time.
+- Testing on different clothing categories and image backgrounds.
+Numerical results must be recorded after running the project and evaluating its recommendations.
+11. Expected Outputs
+- A working Streamlit application.
+- Similar fashion products for a selected or uploaded image.
+- Stored image feature vectors.
+- Product metadata and recommendation results.
+- Dataset statistics and sample-image visualizations.
+- Optional evaluation reports and screenshots from your experiments.
+12. Challenges
+- Low-resolution images may hide important clothing details.
+- Different products can have similar visual patterns.
+- Uploaded images may contain complex backgrounds.
+- Large catalogues require efficient feature storage and searching.
+- General-purpose ImageNet features may not perfectly represent fashion-specific similarity.
+- The system does not automatically account for size, fit, stock availability, or personal shopping preferences.
+13. Future Improvements
+- Add filters for category, color, brand, and price.
+- Compare ResNet-18 with ResNet-50 or EfficientNet.
+- Combine image similarity with product descriptions.
+- Develop a React.js frontend and FastAPI backend.
+- Add a wishlist and user feedback mechanism.
+- Improve retrieval speed with an optimized vector index.
+- Deploy the application online.
+- Evaluate recommendation quality using a labelled test set.
+14. Conclusion
+The Fashion Recommender is a content-based fashion recommendation project that 
+combines deep learning and similarity search. ResNet-18 extracts visual features
+ from product images, while KNN with cosine-based distance retrieves visually 
+ similar catalogue items. The Streamlit interface allows users to browse products,
+ upload images, and explore recommendations.
+The project demonstrates practical applications of computer vision, feature extraction, 
+nearest-neighbor search, and interactive application development in fashion e-commerce.
